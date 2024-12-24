@@ -1,114 +1,128 @@
 import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Input,
+  InputLabel,
+  Typography,
+} from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
-const InputContainer = ({handleSubmit}) => {
+const primaryColor = "#1589e3";
+const buttonBackround = "#90EE90"
+
+const InputContainer = ({ handleSubmit }) => {
   const [option, setOption] = useState("upload");
   const [file, setFile] = useState(null);
   const [link, setLink] = useState("");
+  const [fileName, setFileName] = useState(""); 
 
-  const handleOptionChange = (newOption) => {
-    setOption(newOption);
+  const handleOptionChange = (e) => {
+    setOption(e.target.value);
     setFile(null);
     setLink("");
+    setFileName(""); 
   };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    setFileName(selectedFile ? selectedFile.name : "");
   };
 
   const handleUpload = () => {
-      handleSubmit(file, option, link);
-  }
-  return (
-    <div style={styles.container}>
-      <div style={styles.switchContainer}>
-        <button
-          onClick={() => handleOptionChange("upload")}
-          style={{
-            ...styles.switchButton,
-            backgroundColor: option === "upload" ? "#007BFF" : "#E0E0E0",
-            color: option === "upload" ? "#FFF" : "#000",
-          }}
-        >
-          Upload
-        </button>
-        <button
-          onClick={() => handleOptionChange("link")}
-          style={{
-            ...styles.switchButton,
-            backgroundColor: option === "link" ? "#007BFF" : "#E0E0E0",
-            color: option === "link" ? "#FFF" : "#000",
-          }}
-        >
-          Link
-        </button>
-      </div>
+    handleSubmit(file, option, link);
+  };
 
-      <div style={styles.inputContainer}>
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: 3,
+        border: `1px solid ${primaryColor}`,
+        borderRadius: 1,
+        width: 400,
+        margin: "50px auto",
+      }}
+    >
+      <FormControl component="fieldset">
+        <RadioGroup
+          row
+          aria-label="upload-type"
+          name="upload-type"
+          value={option}
+          onChange={handleOptionChange}
+        >
+          <FormControlLabel
+            value="upload"
+            control={<Radio sx={{color: primaryColor, '&.Mui-checked':{color: primaryColor}}} />} // Use primary color for Radio
+            label="Upload"
+          />
+          <FormControlLabel
+            value="link"
+            control={<Radio sx={{color: primaryColor, '&.Mui-checked':{color: primaryColor}}} />} // Use primary color for Radio
+            label="Link"
+          />
+        </RadioGroup>
+      </FormControl>
+
+      <Box sx={{ width: "100%", marginY: 2 }}>
         {option === "upload" ? (
-          <input type="file" onChange={handleFileChange} style={styles.input} />
+          <FormControl sx={{ width: "100%", display: "grid", placeItems: "center" }}>
+            <InputLabel htmlFor="upload-input"></InputLabel>
+            <Input
+              id="upload-input"
+              type="file"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
+            <label htmlFor="upload-input">
+              <Button
+                component="span"
+                variant="outlined"
+                startIcon={<CloudUploadIcon />}
+                sx={{ color: primaryColor, borderColor: primaryColor }} // Use primary color for button
+              >
+                Upload PDF File
+              </Button>
+            </label>
+              {fileName && (
+                 <Typography variant="body2" sx={{ marginTop: 1 }}>
+                  {`File: ${fileName}`}
+                 </Typography>
+                )}
+
+          </FormControl>
         ) : (
-          <input
-            type="text"
-            placeholder="Enter a link"
+          <TextField
+            fullWidth
+            label="Enter a link"
+            variant="outlined"
             value={link}
             onChange={(e) => setLink(e.target.value)}
-            style={styles.input}
+            sx={{'& label.Mui-focused': {color: primaryColor},
+                '& .MuiInput-underline:after': {borderBottomColor: primaryColor},
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {borderColor: primaryColor},
+                  '&:hover fieldset': {borderColor: primaryColor},
+                  '&.Mui-focused fieldset': {borderColor: primaryColor},
+              }}}
           />
         )}
-      </div>
+      </Box>
 
-      <button onClick={handleUpload} style={styles.button}>
+      <Button variant="contained" color="primary"  onClick={handleUpload} sx={{backgroundColor: buttonBackround, '&:hover': { backgroundColor: buttonBackround }}}>
         Submit
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
-};
-
-
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: "20px",
-    border: "1px solid #CCC",
-    borderRadius: "8px",
-    width: "400px",
-    margin: "auto",
-    marginTop: "50px",
-  },
-  switchContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginBottom: "20px",
-  },
-  switchButton: {
-    flex: 1,
-    padding: "10px",
-    margin: "0 5px",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontSize: "16px",
-  },
-  inputContainer: {
-    marginBottom: "20px",
-  },
-  input: {
-    padding: "10px",
-    fontSize: "16px",
-    border: "1px solid #CCC",
-    borderRadius: "4px",
-  },
-  button: {
-    padding: "10px 20px",
-    backgroundColor: "#007BFF",
-    color: "#FFF",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontSize: "16px",
-  },
 };
 
 export default InputContainer;

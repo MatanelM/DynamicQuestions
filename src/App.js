@@ -15,10 +15,11 @@ import {
     Grid
 } from '@mui/material';
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
+import TopBar from "./components/StyledAppBar";
 const theme = createTheme({
   palette: {
       primary: {
-          main: '#007f66', // Darker green color
+          main: '#1589e3', // light green color
       },
       background: {
           default: '#f8fafc', // Light gray background
@@ -27,13 +28,9 @@ const theme = createTheme({
 });
 
 const App = () => {
-  const [data, setData] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingTime, setLoadingTime] = useState(0);
-  const [option, setOption] = useState("upload");
-  const [file, setFile] = useState(null);
-  const [link, setLink] = useState("");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [hearts, setHearts] = useState(3);
   const [score, setScore] = useState(0);
@@ -46,13 +43,14 @@ const App = () => {
   }, []);
 
   const handleSubmit = async (file, option, link) => {
+    restartGame();
     try {
       const formData = new FormData();
       console.log(file, option, link)
       setLoading(true);
       if (option === "upload" && file) {
-        formData.append("file", file); // Add the file
-        const response = await axios.post("https://www.landa.wiki/questions/pdf_file", formData, {
+        formData.append("file", file);
+        const response = await axios.post("https://landa.wiki/questions/pdf_file", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -61,7 +59,7 @@ const App = () => {
         console.log("Response:", response.data);
         setQuestions(response.data.hobbies)
       } else if (option === "link" && link) {
-        const response = await axios.post("https://www.landa.wiki/questions/pdf_link", {"link": link}, {
+        const response = await axios.post("https://landa.wiki/questions/pdf_link", {"link": link}, {
             headers: {
               "Content-Type": "application/json",
             },
@@ -71,20 +69,21 @@ const App = () => {
         setQuestions(response.data.hobbies);
       }
       setLoading(false);
-      // Send the request
-    //   const response = await axios.post("http://127.0.0.1:5000/upload", formData, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   });
 
-      
     } catch (error) {
       console.error("Error uploading:", error);
     }
   };
-
-    const handleAnswerClick = (answer) => {
+  const restartGame = () => {
+    setQuestions([]);
+    setGameOver(false);
+    setCurrentQuestionIndex(0);
+    setHearts(3);
+    setScore(0);
+    setShowCorrectAnswer(false);
+    setSelectedAnswer(null);
+  }
+  const handleAnswerClick = (answer) => {
       setSelectedAnswer(answer);
       setShowCorrectAnswer(true);
       const indAnswer = questions[currentQuestionIndex].correct_answer;
@@ -116,7 +115,7 @@ const App = () => {
   
   return (
     <div>
-      <h1>React with API Controller</h1>
+      <TopBar title="Quizify"></TopBar>
       <InputContainer handleSubmit={handleSubmit}></InputContainer>
       { loading? <Loading></Loading> : null}
 
@@ -129,8 +128,9 @@ const App = () => {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'start',
     minHeight: '100vh',
+    marginTop: '20px',
     padding: 2
   }}
 >
@@ -149,9 +149,9 @@ const App = () => {
       </Box>
        {gameOver ? (
          <Box>
-             <Typography variant="h4" align="center" gutterBottom>Game Over</Typography>
+             <Typography variant="h4" align="center" gutterBottom>Well Done!</Typography>
              <Typography align="center" gutterBottom>Your final score is {score}</Typography>
-             <Button variant="outlined" onClick={() => window.location.reload()}>Play again</Button>
+             <Button variant="outlined" onClick={() => restartGame()}>Play again</Button>
         </Box>
         ) : (
         <Box>
@@ -163,52 +163,30 @@ const App = () => {
                         <Grid item xs={12} sm={6} key={index}>
                          <Button
                           fullWidth
+                          style={{color:"#333333"}}
                            variant={selectedAnswer === option ? "contained" : "outlined"}
                           onClick={() => handleAnswerClick(option)}
                            disabled={selectedAnswer !== null}
                           >
-                                {option}
+                            {option}
                           </Button>
                       </Grid>
                     ))}
                 </Grid>
                 {showCorrectAnswer && (
+                
                  <Box mt={2}>
-                     <Typography>The correct answer is: {currentQuestion.correct_answer}</Typography>
-                   <Button variant="outlined" onClick={handleNextQuestion} sx={{marginTop: 1}}>Next Question</Button>
-                  </Box>
+                  <Typography>The correct answer is: {currentQuestion.correct_answer}</Typography>
+                  <Typography>{currentQuestion.explanation}</Typography>
+                  <Button variant="outlined" onClick={handleNextQuestion} sx={{marginTop: 1}}>Next Question</Button>
+                </Box>
+              
             )}
             </Box>
             )}
-    </Paper>
-</Container>
-</ThemeProvider>
-
-    //   <div>
-    //   <h1>Parent Component</h1>
-    //   <h2>Questions:</h2>
-    //   <ul>
-    //     {questions.map((q, index) => (
-    //       <li key={index}>
-    //         <strong>Question:</strong> {q.question}
-    //         <ul>
-    //           <li>{q.answer1}</li>
-    //           <li>{q.answer2}</li>
-    //           <li>{q.answer3}</li>
-    //           <li>{q.answer4}</li>
-    //         </ul>
-    //         <div className="answer-container">
-    //           <span className="answer-label">Correct Answer: </span>
-    //           <span className="hidden-answer">{q.correct_answer}</span>
-    //         </div>
-    //         <div className="answer-container">
-    //           <span className="answer-label">Explanation: </span>
-    //           <span className="hidden-answer">{q.explanation}</span>
-    //         </div>
-    //       </li>
-    //     ))}
-    //   </ul>
-    // </div> 
+        </Paper>
+    </Container>
+    </ThemeProvider>
     : <div></div>
       }
       
