@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+
+.answer-container {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+
+.hidden-answer {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.answer-container:hover .hidden-answer {
+  visibility: visible;
+  opacity: 1;
+}
