@@ -48,7 +48,7 @@ const InputContainer = ({ handleSubmit }) => {
         padding: 3,
         border: `1px solid ${primaryColor}`,
         borderRadius: 1,
-        width: 400,
+        width: "clamp(250px, 40vw, 70vw)",
         margin: "50px auto",
       }}
     >

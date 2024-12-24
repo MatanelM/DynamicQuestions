@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import TopBar from "./components/StyledAppBar";
+import SubscriptionComponent from "./components/SubscriptionComponent";
 const theme = createTheme({
   palette: {
     primary: {
@@ -117,7 +118,7 @@ const App = () => {
   const currentQuestion = questions[currentQuestionIndex];
 
   return (
-    <div>
+    <div class="main-container">
       <TopBar title="Quizify"></TopBar>
       <InputContainer handleSubmit={handleSubmit}></InputContainer>
       {loading ? <Loading></Loading> : null}
@@ -236,6 +237,7 @@ const App = () => {
       ) : (
         <div></div>
       )}
+      <SubscriptionComponent />
     </div>
   );
 };

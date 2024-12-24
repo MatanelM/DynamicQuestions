@@ -2,7 +2,7 @@
   text-align: center;
 }
 
-body{
+body {
   padding-top: 150px;
   background-color: #F0F8FF;
   background-image: url('background.jpeg');
@@ -11,6 +11,13 @@ body{
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.main-container {
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -38,6 +45,7 @@ body{
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
