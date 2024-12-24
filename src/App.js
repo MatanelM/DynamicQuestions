@@ -30,7 +30,7 @@ const theme = createTheme({
 const App = () => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingTime, setLoadingTime] = useState(0);
+  // const [loadingTime, setLoadingTime] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [hearts, setHearts] = useState(3);
   const [score, setScore] = useState(0);
@@ -119,7 +119,7 @@ const App = () => {
       <InputContainer handleSubmit={handleSubmit}></InputContainer>
       { loading? <Loading></Loading> : null}
 
-      {questions.length != 0 ? 
+      {questions.length !== 0 ? 
 
 <ThemeProvider theme={theme}>
 <Container
