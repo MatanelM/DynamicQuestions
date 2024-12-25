@@ -6,6 +6,8 @@ body {
   padding-top: 150px;
   background-color: #F0F8FF;
   background-image: url('background.jpeg');
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 .App-logo {
