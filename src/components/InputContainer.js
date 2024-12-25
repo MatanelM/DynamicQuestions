@@ -98,7 +98,9 @@ const InputContainer = ({ handleSubmit }) => {
                   {`File: ${fileName}`}
                  </Typography>
                 )}
-
+                <Typography variant="h6" component="span" style={{color:"#444", fontSize: "11px"}}>
+                  *Max filesize: 20MB
+                </Typography>
           </FormControl>
         ) : (
           <TextField
