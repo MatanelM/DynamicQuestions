@@ -54,7 +54,7 @@ const App = () => {
             headers: {
               "Content-Type": "multipart/form-data",
             },
-            timeout: 15000,
+            timeout: 25000,
           }
         );
         console.log("Response:", response.data);
